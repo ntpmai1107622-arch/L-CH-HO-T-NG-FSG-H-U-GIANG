@@ -1,0 +1,6 @@
+{
+  "name": "Hệ thống Quản lý Lịch Hoạt động Trường học",
+  "description": "Hệ thống quản lý và điều phối lịch hoạt động các Tổ, Phòng ban theo tháng, phát hiện và cảnh báo trùng lịch thông minh, tùy chỉnh và cập nhật linh hoạt.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
