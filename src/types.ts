@@ -137,3 +137,48 @@ export interface WeeklyActivity {
   createdAt?: string;
   updatedAt?: string;
 }
+
+// -------------------------------------------------------------
+// HẠNG MỤC: THÔNG BÁO & NHẬT KÝ TƯƠNG TÁC NGƯỜI DÙNG (REAL-TIME NOTIFICATIONS)
+// -------------------------------------------------------------
+
+export type InteractionType =
+  | 'create_activity'
+  | 'update_activity'
+  | 'delete_activity'
+  | 'status_activity'
+  | 'duplicate_activity'
+  | 'create_weekly'
+  | 'update_weekly'
+  | 'delete_weekly'
+  | 'status_weekly'
+  | 'clear_weekly'
+  | 'update_department'
+  | 'resolve_conflict'
+  | 'restore_data'
+  | 'export_data'
+  | 'remote_sync';
+
+export interface UserInteractionNotification {
+  id: string;
+  type: InteractionType;
+  title: string;
+  message: string;
+  userName?: string;
+  userRole?: string;
+  department?: string;
+  targetId?: string;
+  targetType?: 'yearly' | 'weekly' | 'department' | 'system';
+  timestamp: string;
+  formattedTime: string;
+  read: boolean;
+  severity: 'info' | 'success' | 'warning' | 'error';
+}
+
+export interface UserProfileIdentity {
+  id: string;
+  name: string;
+  role: string;
+  department: string;
+}
+

@@ -10,6 +10,8 @@ import {
   CheckCircle2,
   CalendarDays,
   Video,
+  Bell,
+  Search,
 } from 'lucide-react';
 import { Activity, ConflictIssue } from '../types';
 import { formatCurrencyVND } from '../utils/conflictDetector';
@@ -18,6 +20,9 @@ interface NavbarProps {
   activities: Activity[];
   conflictIssues: ConflictIssue[];
   weeklyCount?: number;
+  unreadNotificationsCount?: number;
+  onOpenNotifications?: () => void;
+  onOpenSearch?: () => void;
   activeView: 'calendar' | 'table' | 'weekly' | 'department' | 'conflicts' | 'budget';
   setActiveView: (view: 'calendar' | 'table' | 'weekly' | 'department' | 'conflicts' | 'budget') => void;
   onAddNew: () => void;
@@ -31,6 +36,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   activities,
   conflictIssues,
   weeklyCount = 0,
+  unreadNotificationsCount = 0,
+  onOpenNotifications,
+  onOpenSearch,
   activeView,
   setActiveView,
   onAddNew,
@@ -38,6 +46,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onResetData,
   onExportCSV,
 }) => {
+
   const totalBudget = activities
     .filter((a) => a.status !== 'cancelled')
     .reduce((sum, a) => sum + (a.budget || 0), 0);
@@ -103,6 +112,39 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
 
             <div className="flex items-center gap-1.5 border-l border-slate-200 pl-2">
+              {onOpenSearch && (
+                <button
+                  id="navbar-search-button"
+                  onClick={onOpenSearch}
+                  className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-orange-50 text-slate-700 hover:text-orange-700 rounded-lg border border-slate-200 hover:border-orange-300 transition-all font-semibold text-xs sm:text-sm cursor-pointer shadow-2xs group"
+                  title="Tìm kiếm bất kỳ thông tin nào trên dashboard (Phím tắt: Ctrl + K hoặc /)"
+                  aria-label="Tìm kiếm toàn diện dashboard"
+                >
+                  <Search className="w-4 h-4 text-slate-500 group-hover:text-orange-600 transition-colors" />
+                  <span className="hidden md:inline">Tìm kiếm</span>
+                  <kbd className="hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-bold text-slate-400 bg-white border border-slate-200 rounded shadow-2xs">
+                    Ctrl+K
+                  </kbd>
+                </button>
+              )}
+
+              {onOpenNotifications && (
+                <button
+                  id="navbar-notifications-button"
+                  onClick={onOpenNotifications}
+                  className="relative p-2 text-slate-700 hover:text-orange-600 hover:bg-orange-50 rounded-lg border border-slate-200 transition-colors cursor-pointer"
+                  title="Xem thông báo & nhật ký tương tác người dùng"
+                  aria-label="Thông báo tương tác"
+                >
+                  <Bell className="w-4 h-4" />
+                  {unreadNotificationsCount > 0 && (
+                    <span className="absolute -top-1 -right-1 flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-orange-600 text-white text-[10px] font-black animate-pulse">
+                      {unreadNotificationsCount > 9 ? '9+' : unreadNotificationsCount}
+                    </span>
+                  )}
+                </button>
+              )}
+
               <button
                 id="btn-add-activity-top"
                 onClick={activeView === 'weekly' && onAddNewWeekly ? onAddNewWeekly : onAddNew}
@@ -235,6 +277,21 @@ export const Navbar: React.FC<NavbarProps> = ({
               Dự trù Ngân Sách & Xuất Báo Cáo
             </button>
           </nav>
+
+          {onOpenSearch && (
+            <button
+              id="view-tab-search-quick"
+              onClick={onOpenSearch}
+              className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-600 hover:text-orange-700 bg-slate-50 hover:bg-orange-50 border border-slate-200 hover:border-orange-300 rounded-lg transition-colors cursor-pointer shrink-0 ml-auto"
+              title="Tìm kiếm bất kỳ thông tin nào trên dashboard"
+            >
+              <Search className="w-3.5 h-3.5 text-orange-600" />
+              <span>Tìm kiếm dữ liệu dashboard...</span>
+              <kbd className="px-1.5 py-0.2 text-[10px] font-bold text-slate-400 bg-white border border-slate-200 rounded">
+                Ctrl+K
+              </kbd>
+            </button>
+          )}
         </div>
       </div>
     </header>
